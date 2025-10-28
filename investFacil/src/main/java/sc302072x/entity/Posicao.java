@@ -9,6 +9,7 @@ import java.util.LinkedList;
 @Table(name = "posicao")
 public class Posicao {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
     @JoinColumn(name = "ativo_ticker")
@@ -23,8 +24,7 @@ public class Posicao {
     public Posicao() {
     }
 
-    public Posicao(int id, Ativo ativo, int quantidade, float precoMedio, float valorTotal) {
-        this.id = id;
+    public Posicao( Ativo ativo, int quantidade, float precoMedio, float valorTotal) {
         this.ativo = ativo;
         this.quantidade = quantidade;
         this.precoMedio = precoMedio;

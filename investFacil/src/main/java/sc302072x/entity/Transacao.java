@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Table(name = "transacao")
 public class Transacao {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private TipoTransacao tipo;
     private LocalDate data;
@@ -23,8 +24,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao(int id, TipoTransacao tipo, int quantidade, float precoUnitario, float taxa, Ativo ativo) {
-        this.id = id;
+    public Transacao(TipoTransacao tipo, int quantidade, float precoUnitario, float taxa, Ativo ativo) {
         this.tipo = tipo;
         this.data = LocalDate.now();
         this.quantidade = quantidade;

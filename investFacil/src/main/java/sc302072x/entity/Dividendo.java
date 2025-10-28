@@ -1,14 +1,13 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 @Entity
 @Table(name = "dividendo")
 public class Dividendo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate dataCom;
     private LocalDate dataPagamento;
@@ -17,8 +16,7 @@ public class Dividendo {
     public Dividendo() {
     }
 
-    public Dividendo(int id, LocalDate dataCom, LocalDate dataPagamento, float valorPago) {
-        this.id = id;
+    public Dividendo( LocalDate dataCom, LocalDate dataPagamento, float valorPago) {
         this.dataCom = dataCom;
         this.dataPagamento = dataPagamento;
         this.valorPago = valorPago;

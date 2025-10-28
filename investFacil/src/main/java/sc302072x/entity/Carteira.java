@@ -1,8 +1,6 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -10,6 +8,7 @@ import java.util.LinkedList;
 @Table(name = "cateira")
 public class Carteira {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private LocalDate dataCriacao;
@@ -18,8 +17,7 @@ public class Carteira {
     public Carteira() {
     }
 
-    public Carteira(int id, String nome, LocalDate dataCriacao) {
-        this.id = id;
+    public Carteira(String nome, LocalDate dataCriacao) {
         this.nome = nome;
         this.dataCriacao = dataCriacao;
         this.posicoes = new LinkedList<>();

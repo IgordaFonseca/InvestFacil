@@ -12,14 +12,13 @@ public class ClasseAtivo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
     @Column(length = 50, nullable = false)
     private String nome;
 
     @Column(length = 255)
     private String descricao;
 
-    /*@OneToMany(mappedBy = "classeAtivo")
-    private List<Ativo> ativos = new ArrayList<>();*/
 
     public ClasseAtivo() {
     }
