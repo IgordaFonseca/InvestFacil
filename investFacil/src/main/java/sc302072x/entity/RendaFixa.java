@@ -1,61 +1,37 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-import java.util.Date;
 @Entity
 @Table(name = "renda_fixa")
+@PrimaryKeyJoinColumn(name = "ticker")
 public class RendaFixa extends Ativo {
-    private float taxa;
-    private Date vencimento;
+
+
+    private Float taxa;
+
+    private LocalDate vencimento;
+
+    @Column(length = 50)
     private String indexador;
 
-    public RendaFixa(String ticker, String nome, ClasseAtivo classeAtivo, float taxa, Date vencimento, String indexador) {
+    public RendaFixa() {}
+
+    public RendaFixa(String ticker, String nome, ClasseAtivo classeAtivo,
+                     Float taxa, LocalDate vencimento, String indexador) {
         super(ticker, nome, classeAtivo);
         this.taxa = taxa;
         this.vencimento = vencimento;
         this.indexador = indexador;
     }
 
-    @Override
-    public String toString() {
-        return "RendaFixa{" +
-                "taxa=" + taxa +
-                ", vencimento=" + vencimento +
-                ", indexador='" + indexador + '\'' +
-                '}';
-    }
+    public Float getTaxa() { return taxa; }
+    public void setTaxa(Float taxa) { this.taxa = taxa; }
 
-    public void alterarTaxa(float taxa){
-        this.taxa = taxa;
-    }
+    public LocalDate getVencimento() { return vencimento; }
+    public void setVencimento(LocalDate vencimento) { this.vencimento = vencimento; }
 
-    public void alterarVencimento(Date date){
-        this.vencimento = date;
-    }
-
-    public float getTaxa() {
-        return taxa;
-    }
-
-    public void setTaxa(float taxa) {
-        this.taxa = taxa;
-    }
-
-    public Date getVencimento() {
-        return vencimento;
-    }
-
-    public void setVencimento(Date vencimento) {
-        this.vencimento = vencimento;
-    }
-
-    public String getIndexador() {
-        return indexador;
-    }
-
-    public void setIndexador(String indexador) {
-        this.indexador = indexador;
-    }
+    public String getIndexador() { return indexador; }
+    public void setIndexador(String indexador) { this.indexador = indexador; }
 }

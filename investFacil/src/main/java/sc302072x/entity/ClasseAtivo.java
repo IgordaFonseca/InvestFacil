@@ -1,28 +1,34 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "classeAtivo")
+@Table(name = "classe_ativo")
 public class ClasseAtivo {
+
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(length = 50, nullable = false)
     private String nome;
+
+    @Column(length = 255)
     private String descricao;
 
-    public ClasseAtivo(int id, String nome, String descricao) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
+    /*@OneToMany(mappedBy = "classeAtivo")
+    private List<Ativo> ativos = new ArrayList<>();*/
+
+    public ClasseAtivo() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -42,3 +48,5 @@ public class ClasseAtivo {
         this.descricao = descricao;
     }
 }
+
+

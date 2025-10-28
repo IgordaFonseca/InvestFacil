@@ -1,8 +1,6 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,6 +10,8 @@ import java.util.LinkedList;
 public class Posicao {
     @Id
     private int id;
+    @ManyToOne
+    @JoinColumn(name = "ativo_ticker")
     private Ativo ativo;
     private int quantidade;
     private float precoMedio;
@@ -19,6 +19,9 @@ public class Posicao {
     private LocalDate dataAtualizacao;
     private LinkedList<Transacao> transacoes;
     private LinkedList<Dividendo> dividendos;
+
+    public Posicao() {
+    }
 
     public Posicao(int id, Ativo ativo, int quantidade, float precoMedio, float valorTotal) {
         this.id = id;

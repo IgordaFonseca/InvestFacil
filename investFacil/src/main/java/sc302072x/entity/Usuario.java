@@ -16,6 +16,9 @@ public class Usuario {
     private String senha;
     private LinkedList<Carteira> carteiras;
 
+    public Usuario() {
+    }
+
     public Usuario(String cpf, String nome, String email, String senha) {
         this.cpf = cpf;
         this.nome = nome;

@@ -15,6 +15,9 @@ public class Carteira {
     private LocalDate dataCriacao;
     private LinkedList<Posicao> posicoes;
 
+    public Carteira() {
+    }
+
     public Carteira(int id, String nome, LocalDate dataCriacao) {
         this.id = id;
         this.nome = nome;

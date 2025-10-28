@@ -1,11 +1,13 @@
 -- Criar banco de dados
+
 CREATE DATABASE IF NOT EXISTS investfacil;
+
 USE investfacil;
 
 -- =====================
 -- Tabela USUARIO
 -- =====================
-CREATE TABLE usuario (
+CREATE TABLE IF NOT EXISTS usuario (
     cpf VARCHAR(11) PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -15,49 +17,48 @@ CREATE TABLE usuario (
 -- =====================
 -- Tabela CLASSE_ATIVO
 -- =====================
-CREATE TABLE classe_ativo (
+CREATE TABLE IF NOT EXISTS classe_ativo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     descricao VARCHAR(255)
 );
 
 -- =====================
--- Tabela ATIVO (herança SINGLE_TABLE)
+-- Tabela ATIVO (herança JOINED)
 -- =====================
-CREATE TABLE ativo (
-    ticker VARCHAR(10) PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    tipo VARCHAR(20) NOT NULL, -- "RENDA_FIXA" ou "RENDA_VARIAVEL"
-    classe_id INT,
-    FOREIGN KEY (classe_id) REFERENCES classe_ativo(id)
+CREATE TABLE IF NOT EXISTS ativo (
+  ticker VARCHAR(20) PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  classe_id INT,
+  CONSTRAINT fk_ativo_classe FOREIGN KEY (classe_id) REFERENCES classe_ativo(id)
 );
 
 -- =====================
--- Tabela RENDA_FIXA (herança JOINED ou TABLE_PER_CLASS)
+-- Tabela RENDA_FIXA
 -- =====================
-CREATE TABLE renda_fixa (
-    ticker VARCHAR(10) PRIMARY KEY,
-    taxa DECIMAL(10,4),
-    vencimento DATE,
-    indexador VARCHAR(20),
-    FOREIGN KEY (ticker) REFERENCES ativo(ticker)
+CREATE TABLE IF NOT EXISTS renda_fixa (
+  ticker VARCHAR(20) PRIMARY KEY,
+  taxa DECIMAL(6,2),
+  vencimento DATE,
+  indexador VARCHAR(50),
+  CONSTRAINT fk_rf_ativo FOREIGN KEY (ticker) REFERENCES ativo(ticker)
 );
 
 -- =====================
 -- Tabela RENDA_VARIAVEL
 -- =====================
-CREATE TABLE renda_variavel (
-    ticker VARCHAR(10) PRIMARY KEY,
-    setor VARCHAR(50),
-    bolsa VARCHAR(20),
-    valor_atual DECIMAL(10,2),
-    FOREIGN KEY (ticker) REFERENCES ativo(ticker)
+CREATE TABLE IF NOT EXISTS renda_variavel (
+  ticker VARCHAR(20) PRIMARY KEY,
+  setor VARCHAR(100),
+  bolsa VARCHAR(50),
+  valor_atual DECIMAL(10,2),
+  CONSTRAINT fk_rv_ativo FOREIGN KEY (ticker) REFERENCES ativo(ticker)
 );
 
 -- =====================
 -- Tabela CARTEIRA
 -- =====================
-CREATE TABLE carteira (
+CREATE TABLE IF NOT EXISTS carteira (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     data_criacao DATE NOT NULL,
@@ -68,9 +69,9 @@ CREATE TABLE carteira (
 -- =====================
 -- Tabela POSICAO
 -- =====================
-CREATE TABLE posicao (
+CREATE TABLE IF NOT EXISTS posicao (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    ativo_ticker VARCHAR(10) NOT NULL,
+    ativo_ticker VARCHAR(20) NOT NULL,
     quantidade INT NOT NULL DEFAULT 0,
     data_compra DATE,
     carteira_id INT NOT NULL,
@@ -81,9 +82,9 @@ CREATE TABLE posicao (
 -- =====================
 -- Tabela TRANSACAO
 -- =====================
-CREATE TABLE transacao (
+CREATE TABLE IF NOT EXISTS transacao (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(20) NOT NULL, -- COMPRA ou VENDA
+    tipo VARCHAR(20) NOT NULL,
     data DATE NOT NULL,
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10,2) NOT NULL,
@@ -96,7 +97,7 @@ CREATE TABLE transacao (
 -- =====================
 -- Tabela DIVIDENDO
 -- =====================
-CREATE TABLE dividendo (
+CREATE TABLE IF NOT EXISTS dividendo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_com DATE NOT NULL,
     data_pagamento DATE,

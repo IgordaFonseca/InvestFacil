@@ -1,8 +1,6 @@
 package sc302072x.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 @Entity
@@ -17,8 +15,13 @@ public class Transacao {
     private float taxa;
     private float precoTotal;
 
+    @ManyToOne
+    @JoinColumn(name = "ativo_ticker")
     private Ativo ativo;
 
+
+    public Transacao() {
+    }
 
     public Transacao(int id, TipoTransacao tipo, int quantidade, float precoUnitario, float taxa, Ativo ativo) {
         this.id = id;

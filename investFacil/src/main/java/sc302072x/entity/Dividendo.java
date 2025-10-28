@@ -14,6 +14,9 @@ public class Dividendo {
     private LocalDate dataPagamento;
     private float valorPago;
 
+    public Dividendo() {
+    }
+
     public Dividendo(int id, LocalDate dataCom, LocalDate dataPagamento, float valorPago) {
         this.id = id;
         this.dataCom = dataCom;

@@ -1,73 +1,57 @@
 package sc302072x.controller;
 
-import sc302072x.dto.UsuarioDTO;
-import sc302072x.dto.CarteiraDTO;
-import sc302072x.entity.Usuario;
-import sc302072x.entity.Carteira;
-import sc302072x.mapper.UsuarioMapper;
-import sc302072x.mapper.CarteiraMapper;
-import sc302072x.service.UsuarioService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import sc302072x.dto.UsuarioDTO;
+import sc302072x.entity.Usuario;
+import sc302072x.service.UsuarioService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private final UsuarioService service;
-    private final UsuarioMapper usuarioMapper;
-    private final CarteiraMapper carteiraMapper;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService service,
-                             UsuarioMapper usuarioMapper,
-                             CarteiraMapper carteiraMapper) {
-        this.service = service;
-        this.usuarioMapper = usuarioMapper;
-        this.carteiraMapper = carteiraMapper;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
-    // Listar todos usuários
     @GetMapping
-    public List<UsuarioDTO> listar() {
-        return service.listar().stream()
-                .map(usuarioMapper::toDTO)
-                .toList();
+    public List<Usuario> listar() {
+        return usuarioService.listarTodos();
     }
 
-    // Buscar por CPF
     @GetMapping("/{cpf}")
-    public UsuarioDTO buscar(@PathVariable String cpf) {
-        Usuario u = service.buscar(cpf).orElseThrow();
-        return usuarioMapper.toDTO(u);
+    public ResponseEntity<Usuario> buscar(@PathVariable String cpf) {
+        return usuarioService.buscarPorCpf(cpf)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Criar novo usuário
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioDTO criar(@Valid @RequestBody UsuarioDTO dto) {
-        Usuario entity = usuarioMapper.toEntity(dto);
-        Usuario salvo = service.salvar(entity);
-        return usuarioMapper.toDTO(salvo);
+    public ResponseEntity<Usuario> criar(@Valid @RequestBody UsuarioDTO dto) {
+        Usuario salvo = usuarioService.salvar(dto);
+        return ResponseEntity
+                .created(URI.create("/api/usuarios/" + salvo.getCpf()))
+                .body(salvo);
     }
 
-    // Remover usuário
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Usuario> atualizar(@PathVariable String cpf,
+                                             @Valid @RequestBody UsuarioDTO dto) {
+        return usuarioService.atualizar(cpf, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{cpf}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable String cpf) {
-        service.remover(cpf);
-    }
-
-    // Adicionar carteira ao usuário
-    @PostMapping("/{cpf}/carteiras")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioDTO adicionarCarteira(@PathVariable String cpf,
-                                        @Valid @RequestBody CarteiraDTO dto) {
-        Carteira carteira = carteiraMapper.toEntity(dto);
-        Usuario atualizado = service.adicionarCarteira(cpf, carteira);
-        return usuarioMapper.toDTO(atualizado);
+    public ResponseEntity<Void> excluir(@PathVariable String cpf) {
+        boolean removido = usuarioService.excluirSeExistir(cpf);
+        return removido ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }
-

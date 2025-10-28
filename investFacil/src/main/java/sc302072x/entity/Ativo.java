@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "ativo")
+
 public abstract class Ativo {
     @Id
     private String ticker;
     private String nome;
+    @ManyToOne
+    @JoinColumn(name = "classe_id") // chave estrangeira na tabela "ativo"
     private ClasseAtivo classeAtivo;
-
     public Ativo() {
     }
 
